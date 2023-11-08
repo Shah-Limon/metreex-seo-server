@@ -10,8 +10,9 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// const uri = process.env.MONGO_URI;
-const uri ="mongodb+srv://ntfseo:ntfseopass@nftseo.e1zbadu.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGO_URI;
+// const uri ="mongodb+srv://ntfseo:ntfseopass@nftseo.e1zbadu.mongodb.net/?retryWrites=true&w=majority";
+
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -26,7 +27,6 @@ async function run() {
     const websiteCollections = client.db("seoWebsite").collection("websiteList");
     const packageCollections = client.db("seoWebsite").collection("packages");
     const packageTitleCollections = client.db("seoWebsite").collection("packagesTitle");
-    
     const orderCollections = client.db("seoWebsite").collection("orders");
     const paypalEmailCollections = client.db("seoWebsite").collection("email");
     const GeneralCollections = client.db("seoWebsite").collection("general");
@@ -51,6 +51,189 @@ async function run() {
     const newsLetterCollections = client.db("seoWebsite").collection("newsLetter");
     const userCollection = client.db("seoWebsite").collection("users");
     const featurePageCollections = client.db("seoWebsite").collection("features");
+
+
+
+    const logoCollection = client.db("seoWebsite").collection("logo");
+    const brandImagelogoCollection = client.db("seoWebsite").collection("brandImage");
+   
+
+
+
+
+    /* Header Area */
+
+    // app.post("/add-logos", async (req, res) => {
+    //   const logo = req.body;
+    //   const result = await logoCollection.insertOne(logo);
+    //   res.send(result);
+    // });
+
+    // app.get("/logos", async (req, res) => {
+    //   const query = {};
+    //   const cursor = logoCollection.find(query);
+    //   const logo = await cursor.toArray();
+    //   res.send(logo);
+    // });
+    // app.get("/logo/:id", async (req, res) => {
+    //   const query = {};
+    //   const cursor = logoCollection.find(query);
+    //   const logo = await cursor.toArray();
+    //   res.send(logo);
+    // });
+
+    // app.put("/logo/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const updateLogo = req.body;
+    //   const filter = { _id: new ObjectId(id) };
+    //   const options = { upsert: true };
+    //   const updatedDoc = {
+    //     $set: {
+    //       logo: updateLogo.logo,
+    //     },
+    //   };
+
+    //   const result = await logoCollection.updateOne(
+    //     filter,
+    //     updatedDoc,
+    //     options
+    //   );
+    //   res.send(result);
+    // });
+
+
+
+
+
+/* brandImagelogoCollection */
+
+app.post("/add-brand-image", async (req, res) => {
+  const brandImage = req.body;
+  const result = await brandImagelogoCollection.insertOne(brandImage);
+  res.send(result);
+});
+
+app.get("/brand-images", async (req, res) => {
+  const query = {};
+  const cursor = brandImagelogoCollection.find(query);
+  const brandImage = await cursor.toArray();
+  res.send(brandImage);
+});
+app.get("/brand-image/:id", async (req, res) => {
+  const query = {};
+  const cursor = brandImagelogoCollection.find(query);
+  const brandImage = await cursor.toArray();
+  res.send(brandImage);
+});
+
+app.put("/brand-image/:id", async (req, res) => {
+  const id = req.params.id;
+  const brandImage = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      logo: brandImage.logo,
+    },
+  };
+
+  const result = await brandImagelogoCollection.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
