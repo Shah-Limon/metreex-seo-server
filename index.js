@@ -51,7 +51,17 @@ async function run() {
     const newsLetterCollections = client.db("seoWebsite").collection("newsLetter");
     const userCollection = client.db("seoWebsite").collection("users");
     const featurePageCollections = client.db("seoWebsite").collection("features");
+    const OurSolutionsCollections = client.db("seoWebsite").collection("OurSolutions");
+    const OurSolutionsTitleCollections = client.db("seoWebsite").collection("OurSolutionstitle");
 
+    const AboutCompanyTitleCollections = client.db("seoWebsite").collection("AboutCompany");
+    const AboutCompanyCollections = client.db("seoWebsite").collection("AboutCompanyTitle");
+    const CouterOptionTitleCollections = client.db("seoWebsite").collection("CouterOption");
+    const OurservicesCollections = client.db("seoWebsite").collection("Ourservices");
+    const OurservicesTitleCollections = client.db("seoWebsite").collection("OurserviceTitle");
+    const FeatureTwoCollections = client.db("seoWebsite").collection("FeatureTwo");
+    const CtaCollections = client.db("seoWebsite").collection("CtaList");
+    const VideosSectionCollections = client.db("seoWebsite").collection("VideosSection");
 
 
     const logoCollection = client.db("seoWebsite").collection("logo");
@@ -610,6 +620,7 @@ app.put("/brand-image/:id", async (req, res) => {
           const updatedDoc = {
             $set: {
               logo: updateData.logo,
+            
             },
           };
     
@@ -634,18 +645,22 @@ app.put("/brand-image/:id", async (req, res) => {
           res.send(result);
         });
     
-        app.get("/about", async (req, res) => {
+        app.get("/abouts", async (req, res) => {
           const query = {};
           const cursor = AboutUsOptionCollections.find(query);
           const about = await cursor.toArray();
           res.send(about);
         });
-               app.get("/about/:id", async (req, res) => {
-          const query = {}; 
-          const cursor = AboutUsOptionCollections.find(query);
-const about = await cursor.toArray();
+
+        app.get("/about/:id", async (req, res) => {
+          const id = req.params.id; 
+          const query = { _id: new ObjectId(id) }; 
+          const about = await AboutUsOptionCollections.findOne(query); 
           res.send(about);
         });
+       
+
+         
     
         app.put("/edit-about/:id", async (req, res) => {
           const id = req.params.id;
@@ -657,8 +672,6 @@ const about = await cursor.toArray();
               img: updateAbout.img,
               title: updateAbout.title,
               subText: updateAbout.subText,
-              btnText: updateAbout.btnText,
-              btnUrl: updateAbout.btnUrl,
             },
           };
     
@@ -699,13 +712,11 @@ const about = await cursor.toArray();
           const options = { upsert: true };
           const updatedDoc = {
             $set: {
-              bannerToptext: updateBanner.bannerToptext,
-              bannerHeadingText1: updateBanner.bannerHeadingText1,
-              bannerHeadingText2: updateBanner.bannerHeadingText2,
-              typingHeading1: updateBanner.typingHeading1,
-              typingHeading2: updateBanner.typingHeading2,
-              typingHeading3: updateBanner.typingHeading3,
+              bannerHeading: updateBanner.bannerHeading,
+              buttonText: updateBanner.buttonText,
+              bunnerImage: updateBanner.bunnerImage,
               bannertext: updateBanner.bannertext,
+          
             },
           };
     
@@ -1070,9 +1081,9 @@ app.put("/edit-team-title/:id", async (req, res) => {
     
 
     app.get("/testimonial-title/:id", async (req, res) => {
-      const id = req.params.id; // Get the ID from the URL
-      const query = { _id: new ObjectId(id) }; // Filter by ID
-      const testimonialTitle = await TestimonialTitleOptionCollections.findOne(query); // Use findOne to get a single testimonial
+      const id = req.params.id; 
+      const query = { _id: new ObjectId(id) }; 
+      const testimonialTitle = await TestimonialTitleOptionCollections.findOne(query); 
       res.send(testimonialTitle);
     });
    
@@ -1086,9 +1097,9 @@ app.put("/edit-team-title/:id", async (req, res) => {
       const options = { upsert: true };
       const updatedDoc = {
         $set: {
-          titleTopText: testimonialTitle.titleTopText,
-          titleOne: testimonialTitle.titleOne,
-          titleTwo: testimonialTitle.titleTwo,
+          title: testimonialTitle.title,
+          desc: testimonialTitle.desc,
+          reviewNumber: testimonialTitle.reviewNumber,
          
         },
       };
@@ -1165,7 +1176,7 @@ app.put("/edit-team-title/:id", async (req, res) => {
       res.send(result);
     });
 
-/* title */
+/* faqs */
     app.post("/faq-title", async (req, res) => {
       const faq = req.body;
       const result = await FaqsTitleCollections.insertOne(faq);
@@ -1193,11 +1204,7 @@ app.put("/edit-team-title/:id", async (req, res) => {
       const updatedDoc = {
         $set: {
           titleTopText: faq.titleTopText,
-          titleOne: faq.titleOne,
-          titleTwo: faq.titleTwo,
-          
-      
-          
+          desc: faq.desc,       
         },
       };
 
@@ -1210,7 +1217,87 @@ app.put("/edit-team-title/:id", async (req, res) => {
     });
     
 
-    /* faqs */
+
+    /* cta */
+    app.post("/add-cta", async (req, res) => {
+      const cta = req.body;
+      const result = await CtaCollections.insertOne(cta);
+      res.send(result);
+    });
+
+    app.get("/cta-lists", async (req, res) => {
+      const query = {};
+      const cursor = CtaCollections.find(query);
+      const cta = await cursor.toArray();
+      res.send(cta);
+    });
+    app.get("/cta-list/:id", async (req, res) => {
+      const id = req.params.id; 
+      const query = { _id: new ObjectId(id) }; 
+      const cta = await CtaCollections.findOne(query); 
+      res.send(cta);
+    });
+
+    app.put("/cta-list/:id", async (req, res) => {
+      const id = req.params.id;
+      const cta = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          ctaHeading: cta.ctaHeading,
+          buttonText: cta.buttonText,   
+          bannertext: cta.bannertext,   
+          buttonLink: cta.buttonLink,   
+        },
+      };
+
+      const result = await CtaCollections.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
+/* videosSection */
+
+
+app.get("/video-sections", async (req, res) => {
+  const query = {};
+  const cursor = VideosSectionCollections.find(query);
+  const cta = await cursor.toArray();
+  res.send(cta);
+});
+app.get("/video-section/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const cta = await VideosSectionCollections.findOne(query); 
+  res.send(cta);
+});
+
+app.put("/video-section/:id", async (req, res) => {
+  const id = req.params.id;
+  const cta = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      videoHeading: cta.videoHeading,
+      description: cta.description,   
+      youtubeLink: cta.youtubeLink,   
+      ctaImage: cta.ctaImage,   
+    },
+  };
+
+  const result = await VideosSectionCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+
 
 /* footer area */
 
@@ -1251,7 +1338,7 @@ app.put("/edit-team-title/:id", async (req, res) => {
           twitter: footerSocial.twitter,
           instragram: footerSocial.instragram,
           youtube: footerSocial.youtube,
-          email: footerSocial.email,
+          linkedin: footerSocial.linkedin,
           
         },
       };
@@ -1270,13 +1357,13 @@ app.put("/edit-team-title/:id", async (req, res) => {
 
 
     
-app.post("/footer-link", async (req, res) => {
+app.post("/add-footer-about", async (req, res) => {
   const footerLink = req.body;
   const result = await FooterLinkCollections.insertOne(footerLink);
   res.send(result);
 });
 
-app.get("/footer-links", async (req, res) => {
+app.get("/footer-about", async (req, res) => {
   const query = {};
   const cursor = FooterLinkCollections.find(query);
   const footerLink = await cursor.toArray();
@@ -1284,7 +1371,7 @@ app.get("/footer-links", async (req, res) => {
 });
 
 
-app.get("/footer-link/:id", async (req, res) => {
+app.get("/footer-about/:id", async (req, res) => {
   const id = req.params.id; // Get the ID from the URL
   const query = { _id: new ObjectId(id) }; // Filter by ID
   const footerLink = await FooterLinkCollections.findOne(query); // Use findOne to get a single testimonial
@@ -1294,7 +1381,7 @@ app.get("/footer-link/:id", async (req, res) => {
 
 
 
-app.put("/footer-link/:id", async (req, res) => {
+app.put("/footer-about/:id", async (req, res) => {
   const id = req.params.id;
   const footerLink = req.body;
   const filter = { _id: new ObjectId(id) };
@@ -1354,10 +1441,15 @@ app.put("/footer-link/:id", async (req, res) => {
       const options = { upsert: true };
       const updatedDoc = {
         $set: {
-          sliderTitle: sliderUpdate.sliderTitle,
+        
           sliderDesc: sliderUpdate.sliderDesc,
           sliderImg: sliderUpdate.sliderImg,
 
+
+
+
+
+          
 
           
          
@@ -1566,11 +1658,13 @@ app.get("/reply-tickets/", async (req, res) => {
 
 /* newsLetter */
 
-app.post("/add-newsLetter/", async (req, res) => {
-  const newsLetter = req.body;
-  const result = await newsLetterCollections.insertOne(newsLetter);
+
+app.post("/add-newsLetter", async (req, res) => {
+  const feature = req.body;
+  const result = await newsLetterCollections.insertOne(feature);
   res.send(result);
 });
+
 
 app.get("/subscription-email/", async (req, res) => {
   const query = {};
@@ -1616,13 +1710,17 @@ app.put("/feature/:id", async (req, res) => {
   const options = { upsert: true };
   const updatedDoc = {
     $set: {
-     
-      topText: feature.topText,
-      title: feature.title,
-      subText: feature.subText,
-      featureTitle: feature.featureTitle,
       featureImg: feature.featureImg,
-      featureDesc: feature.featureDesc,
+      featureTitle: feature.featureTitle,
+      featureDescOne: feature.featureDescOne,
+      featureDescTwo: feature.featureDescTwo,
+      featureDescThree: feature.featureDescThree,
+      counterTitleOne: feature.counterTitleOne,
+      couterDescOne: feature.couterDescOne,
+      counterNumberOne: feature.counterNumberOne,
+      counterTitleTwo: feature.counterTitleTwo,
+      couterDescTwo: feature.couterDescTwo,
+      counterNumberTwo: feature.counterNumberTwo,
 
         
     },
@@ -1635,6 +1733,365 @@ app.put("/feature/:id", async (req, res) => {
   );
   res.send(result);
 });
+
+
+
+/* OurSolutions list */
+
+app.post("/add-solution", async (req, res) => {
+  const solution = req.body;
+  const result = await OurSolutionsCollections.insertOne(solution);
+  res.send(result);
+});
+
+app.get("/solutions", async (req, res) => {
+  const query = {};
+  const cursor = OurSolutionsCollections.find(query);
+  const solution = await cursor.toArray();
+  res.send(solution);
+});
+
+
+app.get("/solution/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const solution = await OurSolutionsCollections.findOne(query); 
+  res.send(solution);
+});
+
+app.put("/solution/:id", async (req, res) => {
+  const id = req.params.id;
+  const solution = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      featureTitle: solution.featureTitle,
+      featureDesc: solution.featureDesc,
+      featureImg: solution.featureImg,
+    
+
+        
+    },
+  };
+
+  const result = await OurSolutionsCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result); 
+});
+
+
+/* Solution title */
+
+app.get("/solutions-title", async (req, res) => {
+  const query = {};
+  const cursor = OurSolutionsTitleCollections.find(query);
+  const solution = await cursor.toArray();
+  res.send(solution);
+});
+
+
+app.get("/solution-title/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const solution = await OurSolutionsTitleCollections.findOne(query); 
+  res.send(solution);
+});
+
+app.put("/solution-title/:id", async (req, res) => {
+  const id = req.params.id;
+  const solution = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      desc: solution.desc,
+      title: solution.title,
+    },
+  };
+
+  const result = await OurSolutionsTitleCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result); 
+});
+
+/* Counter */
+app.post("/add-counter", async (req, res) => {
+  const counter = req.body;
+  const result = await CouterOptionTitleCollections.insertOne(counter);
+  res.send(result);
+});
+
+app.get("/counter-list", async (req, res) => {
+  const query = {};
+  const cursor = CouterOptionTitleCollections.find(query);
+  const counter = await cursor.toArray();
+  res.send(counter);
+});
+
+
+app.get("/counter/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const counter = await CouterOptionTitleCollections.findOne(query); 
+  res.send(counter);
+});
+
+
+
+
+app.put("/counter/:id", async (req, res) => {
+  const id = req.params.id;
+  const counter = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      counterTitle: counter.counterTitle,
+      counterNumber: counter.counterNumber,
+      
+     
+    },
+  };
+  const result = await CouterOptionTitleCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+/* About Company */
+app.post("/add-about-company", async (req, res) => {
+  const about = req.body;
+  const result = await AboutCompanyTitleCollections.insertOne(about);
+  res.send(result);
+});
+
+app.get("/about-company-list", async (req, res) => {
+  const query = {};
+  const cursor = AboutCompanyTitleCollections.find(query);
+  const about = await cursor.toArray();
+  res.send(about);
+});
+
+
+app.get("/about-company-list/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const about = await AboutCompanyTitleCollections.findOne(query); 
+  res.send(about);
+});
+
+
+
+
+app.put("/about-company-list/:id", async (req, res) => {
+  const id = req.params.id;
+  const about = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      counterTitle: about.counterTitle,
+      counterNumber: about.counterNumber,
+    },
+  };
+  const result = await AboutCompanyTitleCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+/* About Company title*/
+
+
+app.get("/company-about-title", async (req, res) => {
+  const query = {};
+  const cursor = AboutCompanyCollections.find(query);
+  const about = await cursor.toArray();
+  res.send(about);
+});
+
+
+app.get("/company-about-title/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const about = await AboutCompanyCollections.findOne(query); 
+  res.send(about);
+});
+
+
+
+
+app.put("/company-about-title/:id", async (req, res) => {
+  const id = req.params.id;
+  const about = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      name: about.name,
+      companyName: about.companyName,
+      Desc: about.Desc,     
+    },
+  };
+  const result = await AboutCompanyCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+/* Our services list */
+
+app.post("/add-service", async (req, res) => {
+  const service = req.body;
+  const result = await OurservicesCollections.insertOne(service);
+  res.send(result);
+});
+
+app.get("/services", async (req, res) => {
+  const query = {};
+  const cursor = OurservicesCollections.find(query);
+  const service = await cursor.toArray();
+  res.send(service);
+});
+
+
+app.get("/service/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const service = await OurservicesCollections.findOne(query); 
+  res.send(service);
+});
+
+app.put("/service/:id", async (req, res) => {
+  const id = req.params.id;
+  const service = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      featureImg: service.featureImg,
+      serviceTitle: service.serviceTitle,
+      serviceDesc: service.serviceDesc,
+     
+    },
+  };
+
+  const result = await OurservicesCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result); 
+});
+
+/* services title */
+app.post("/add-service-title", async (req, res) => {
+  const service = req.body;
+  const result = await OurservicesTitleCollections.insertOne(service);
+  res.send(result);
+});
+
+
+app.get("/services-title", async (req, res) => {
+  const query = {};
+  const cursor = OurservicesTitleCollections.find(query);
+  const service = await cursor.toArray();
+  res.send(service);
+});
+app.get("/services-title/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const service = await OurservicesTitleCollections.findOne(query); 
+  res.send(service);
+});
+
+app.put("/services-title/:id", async (req, res) => {
+  const id = req.params.id;
+  const service = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      title: service.title,
+      desc: service.desc,
+    },
+  };
+
+  const result = await OurservicesTitleCollections.updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result); 
+});
+
+
+/* Feature Two */
+
+app.post("/add-feature-two", async (req, res) => {
+  const feature = req.body;
+  const result = await FeatureTwoCollections.insertOne(feature);
+  res.send(result);
+});
+
+app.get("/features-two", async (req, res) => {
+  const query = {};
+  const cursor = FeatureTwoCollections.find(query);
+  const feature = await cursor.toArray();
+  res.send(feature);
+});
+
+
+app.get("/feature-two/:id", async (req, res) => {
+  const id = req.params.id; 
+  const query = { _id: new ObjectId(id) }; 
+  const feature = await FeatureTwoCollections.findOne(query); 
+  res.send(feature);
+});
+
+
+
+
+app.put("/feature-two/:id", async (req, res) => {
+  const id = req.params.id;
+  const feature = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updatedDoc = {
+    $set: {
+      featureImg: feature.featureImg,
+      featureTitle: feature.featureTitle,
+      featureDescOne: feature.featureDescOne,
+      featureDescTwo: feature.featureDescTwo,
+      featureDescThree: feature.featureDescThree,
+      Desc: feature.Desc,
+      
+        
+    },
+  };
+
+  const result = await FeatureTwoCollections .updateOne(
+    filter,
+    updatedDoc,
+    options
+  );
+  res.send(result);
+});
+
+
 
 /* contact */
 
