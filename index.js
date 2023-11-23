@@ -62,6 +62,8 @@ async function run() {
     const FeatureTwoCollections = client.db("seoWebsite").collection("FeatureTwo");
     const CtaCollections = client.db("seoWebsite").collection("CtaList");
     const VideosSectionCollections = client.db("seoWebsite").collection("VideosSection");
+    const AboutPageCollections = client.db("seoWebsite").collection("AboutPage");
+    const AboutPageTitleCollections = client.db("seoWebsite").collection("AboutPageTitle");
 
 
     const logoCollection = client.db("seoWebsite").collection("logo");
@@ -682,6 +684,97 @@ app.put("/brand-image/:id", async (req, res) => {
           );
           res.send(result);
         });
+
+
+
+             /* About page Option Setting */
+
+             app.post("/add-about-page", async (req, res) => {
+              const about = req.body;
+              const result = await AboutPageCollections.insertOne(about);
+              res.send(result);
+            });
+        
+            app.get("/abouts-page", async (req, res) => {
+              const query = {};
+              const cursor = AboutPageCollections.find(query);
+              const about = await cursor.toArray();
+              res.send(about);
+            });
+    
+            app.get("/about-page/:id", async (req, res) => {
+              const id = req.params.id; 
+              const query = { _id: new ObjectId(id) }; 
+              const about = await AboutPageCollections.findOne(query); 
+              res.send(about);
+            });
+           
+    
+             
+        
+            app.put("/edit-about-page/:id", async (req, res) => {
+              const id = req.params.id;
+              const updateAbout = req.body;
+              const filter = { _id: new ObjectId(id) };
+              const options = { upsert: true };
+              const updatedDoc = {
+                $set: {
+                  img: updateAbout.img,
+                  title: updateAbout.title,
+                  subText: updateAbout.subText,
+                },
+              };
+        
+              const result = await AboutPageCollections.updateOne(
+                filter,
+                updatedDoc,
+                options
+              );
+              res.send(result);
+            });
+
+
+                /* About page Title Option Title Setting */
+
+
+            
+                app.get("/about-page-titles", async (req, res) => {
+                  const query = {};
+                  const cursor = AboutPageTitleCollections.find(query);
+                  const about = await cursor.toArray();
+                  res.send(about);
+                });
+        
+                app.get("/about-page-title/:id", async (req, res) => {
+                  const id = req.params.id; 
+                  const query = { _id: new ObjectId(id) }; 
+                  const about = await AboutPageTitleCollections.findOne(query); 
+                  res.send(about);
+                });
+               
+        
+                 
+            
+                app.put("/edit-about-page-title/:id", async (req, res) => {
+                  const id = req.params.id;
+                  const updateAbout = req.body;
+                  const filter = { _id: new ObjectId(id) };
+                  const options = { upsert: true };
+                  const updatedDoc = {
+                    $set: {
+                    
+                      title: updateAbout.title,
+                      desc: updateAbout.desc,
+                    },
+                  };
+            
+                  const result = await AboutPageTitleCollections.updateOne(
+                    filter,
+                    updatedDoc,
+                    options
+                  );
+                  res.send(result);
+                });
     
         /* Banner area */
 
