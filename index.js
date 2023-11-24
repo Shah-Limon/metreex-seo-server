@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 const uri = process.env.MONGO_URI;
-// const uri ="mongodb+srv://ntfseo:ntfseopass@nftseo.e1zbadu.mongodb.net/?retryWrites=true&w=majority";
+// MONGO_URI=mongodb+srv://limonworking:Metreex@metreex.knqol96.mongodb.net/?retryWrites=true&w=majority
 
 
 const client = new MongoClient(uri, {
