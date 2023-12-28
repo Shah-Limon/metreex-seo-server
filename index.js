@@ -11,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 const uri = process.env.MONGO_URI;
-// MONGO_URI=mongodb+srv://limonworking:Metreex@metreex.knqol96.mongodb.net/?retryWrites=true&w=majority
 
 
 const client = new MongoClient(uri, {
@@ -2198,8 +2197,8 @@ app.put("/feature-two/:id", async (req, res) => {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("eCommerce Website is Live Now");
+  res.send("Website is Live Now");
 });
 app.listen(port, () => {
-  console.log(`eCommerce Website is Live Now ${port}`);
+  console.log(`Server is Live Now ${port}`);
 });
